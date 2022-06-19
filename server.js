@@ -4,20 +4,32 @@ const MongoClient = require('mongodb').MongoClient
 require('dotenv').config
 const PORT = 5001
 
-const dbName = 'counter-app'
-
 // Middleware
+app.set('view engine', 'ejs')
 app.use(express.static("public"))
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+
+
 
 MongoClient.connect('mongodb+srv://user:user@cluster0.fsqbv1n.mongodb.net/?retryWrites=true&w=majority', { useUnifiedTopology: true })
     .then(client => {
-        console.log(`Connected to ${dbName} Database`)
+        const db = client.db('counter-app')
+        
+        app.get('/', (req, res) => {
+            db.collection('counter').find().toArray()
+                .then(result => {
+                    res.render('index.ejs', {counter: result[0].counter})
+                })
+                .catch(err => console.log(err))
+        })
+
+        app.put('/increaseCounter', (req, res) => {
+            db.collection('counter').find
+        })
     })
 
 
-app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html')
-})
 
 app.listen(PORT, () => {
     console.log(`App running on port ${PORT}.`)
