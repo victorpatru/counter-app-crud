@@ -12,7 +12,7 @@ app.use(express.urlencoded({ extended: true }))
 
 
 
-MongoClient.connect('mongodb+srv://user:user@cluster0.fsqbv1n.mongodb.net/?retryWrites=true&w=majority', { useUnifiedTopology: true })
+MongoClient.connect(process.env.DB_STRING, { useUnifiedTopology: true })
     .then(client => {
         const db = client.db('counter-app')
         
@@ -25,12 +25,32 @@ MongoClient.connect('mongodb+srv://user:user@cluster0.fsqbv1n.mongodb.net/?retry
         })
 
         app.put('/increaseCounter', (req, res) => {
-            db.collection('counter').find
-        })
+            db.collection('counter').updateOne({counter: req.body.counter }, { $set: { counter: req.body.counter + 1}})
+            .then(result => {
+               
+                res.redirect('/')
+            })
+            .catch(err => console.log(err))
     })
 
+        app.put('/decreaseCounter', (req, res) => {
+            db.collection('counter').updateOne({counter: req.body.counter}, { $set: { counter: req.body.counter - 1} })
+            .then(result => {
+                res.redirect('/')
+            })
+            .catch(err => console.log(err))
+        })
 
+        app.put('/resetCounter', (req, res) => {
+            db.collection('counter').updateOne({counter: req.body.counter}, { $set: { counter: 0} })
+            .then(result => {
+                res.redirect('/')
+            })
+            .catch(err => console.log(err))
+        })
 
-app.listen(PORT, () => {
-    console.log(`App running on port ${PORT}.`)
-})
+        app.listen(PORT, () => {
+            console.log(`App running on port ${PORT}.`)
+        })
+
+    })
