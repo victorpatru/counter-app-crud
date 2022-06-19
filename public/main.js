@@ -1,17 +1,52 @@
 // Create the increase, decrease, reset functionality
 
-let counter = 0
+const increaseButton = document.querySelector('.increase')
+const decreaseButton = document.querySelector('.decrease')
+const resetButton = document.querySelector('.reset')
+const value = document.getElementById('value').textContent
 
-const btns = document.querySelectorAll('.btn')
+increaseButton.addEventListener('click', () => {
+    fetch('/increaseCounter', {
+        method: 'put',
+        headers: { "Content-Type" : "application/json" },
+        body: JSON.stringify({
+            'counter': Number(value)
+        })
+    })
+        .then(res => {
+            res.json()
+            location.reload()
+        })
+        .catch(err => console.log(err))
+})
 
-btns.forEach(btn => btn.addEventListener('click', updateValue))
+decreaseButton.addEventListener('click', () => {
+    fetch('/decreaseCounter', {
+        method: 'put',
+        headers: { "Content-Type": "application/json"},
+        body: JSON.stringify({
+            'counter': Number(value)
+        })
+       
+    })
+    .then(res => {
+        res.json()
+        location.reload()
+    })
+    .catch(err => console.log(err))
+})
 
-function updateValue() {
-    if (event.currentTarget.classList.contains('increase')) {
-        counter++
-    } else if (event.currentTarget.classList.contains('decrease')) {
-        counter--
-    } else {
-        counter = 0
-    }
-}
+resetButton.addEventListener('click', () => {
+    fetch('/resetCounter', {
+        method: 'put',
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            'counter': Number(value)
+        })
+    })
+    .then(res => {
+        res.json()
+        location.reload()
+    })
+    .catch(err => console.log(err))
+})
