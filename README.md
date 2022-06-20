@@ -2,8 +2,6 @@
 The application allows the user to increase, decrease, and reset the score counter of our application.
 
 
-**Link to project:** http://recruiters-love-seeing-live-demos.com/
-
 <img width="1842" alt="CleanShot 2022-06-20 at 13 44 05@2x" src="https://user-images.githubusercontent.com/102596893/174585555-f1e9094a-75a3-4cb8-825e-941000481b0d.png">
 
 
